@@ -8,7 +8,7 @@ function Users({ users, choiceUserId }) {
             <label htmlFor="users"> </label>
             <select name="users" id="users" onChange={choiceUserId} >
                 {users.map(el =>
-                    <option key={el.id} value={el.userId} >{el.login}</option>
+                    <option key={el.id} value={el.id} >{el.login}</option>
                 )}
             </select>
         </div>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 
-function Message({ content, id, deleteMessage }) {
+function Message({ content, id, deleteMessage, name, userId }) {
 
     const [message, setMessage] = useState(content)
     const [editMessage, setEditMessage] = useState(message || '')
@@ -33,21 +33,24 @@ function Message({ content, id, deleteMessage }) {
     }
 
     return (
-        <div className='messages'>
-            {isButton && message}
-            {!isButton && <textarea
-                className='input-text'
-                value={editMessage}
-                placeholder={message}
-                onChange={onchange}
-                onKeyDownCapture={handleKeypress}
-                autoFocus
-            />}
-            <div className='button-box'>
-                <button onClick={edit}>{isButton ? 'edit' : 'save'}</button>
-                <button onClick={deleteMessage} className='x-button'>X</button>
-            </div>
-        </div>
+        <div className="messages">
+        {isButton && (<>
+            <span style={{ color: 'gray' }}>{name}: </span><span className='messages-text' >{message}</span>
+        </>
+        )}
+        {!isButton && <textarea
+            className='input-text'
+            value={editMessage}
+            placeholder={message}
+            onChange={onchange}
+            onKeyDownCapture={handleKeypress}
+            autoFocus
+        />}
+        {userId == id ? <div className='button-box'>
+            <button onClick={edit}>{isButton ? 'edit' : 'save'}</button>
+            <button onClick={deleteMessage} className='x-button'>X</button>
+        </div> : <div className='button-zero'></div> }
+    </div>
     )
 }
 
