@@ -5,6 +5,7 @@ import './App.css'
 import Message from './coponents/Message'
 import AddMessage from './coponents/AddMessage'
 import Users from './coponents/Users'
+import Chats from './coponents/Chats'
 import noteService from './sevices/notes'
 
 
@@ -14,6 +15,8 @@ function App() {
   const [notes, setNotes] = useState([])
   const [users, setUsers] = useState([])
   const [userId, setUserId] = useState('')
+  const [chats, setChats] = useState([])
+  const [chatId, setChatId] = useState('')
 
   useEffect(() => {
     noteService
@@ -44,41 +47,65 @@ function App() {
       setUserId(JSON.parse(savedUser))
     }
   }, [])
+
+  const isChat = id => id.chatid === chatId
+  const display = chatId ? notes.filter(isChat)
+    .map((el) => {
+      const user = users.find(user => user.id === el.author)
+      const name = user ? user.login : ''
+
+      return <li key={el.id} style={{ backgroundColor: el.author === userId ? "#f8f8f8" : "white" }} >
+        <Message
+          content={el.content}
+          userId={userId}
+          name={name}
+          id={el.author}
+          deleteMessage={() => deleteMessage(el.id)}
+        />
+      </li>
+
+    }
+    ) : notes.map((el) => {
+      const user = users.find(user => user.id === el.author)
+      const name = user ? user.login : ''
+
+      return <li key={el.id} style={{ backgroundColor: el.author === userId ? "#f8f8f8" : "white" }} >
+        <Message
+          content={el.content}
+          userId={userId}
+          chatId={chatId}
+          name={name}
+          id={el.author}
+          deleteMessage={() => deleteMessage(el.id)}
+        />
+      </li>
+    }
+    )
+
   return (
     <>
+      <Users users={users} choiceUserId={choiceUser} userId={userId} />
+      <h1>Welcome to the Chat</h1>
       <div className='container'>
-      <Users users={users} choiceUserId={choiceUser} />
-        <h1>Welcome to the Chat</h1>
-        {userId && <div className='server'>
-        <ol>
-          { notes.map((el) => {
-            const user = users.find(user => user.id === el.author)
-            const name = user ? user.login : ''
-            return <li key={el.id} style={{ backgroundColor: el.author === userId ? "#f8f8f8" : "white" }} >
-              <Message
-                content={el.content}
-                userId={userId}
-                name={name}
-                id={el.author}
-                deleteMessage={() => deleteMessage(el.id)}
-              />
-            </li>
-          }
-          )}
-        </ol>
-        <h2>You can add your message in the field below</h2>
-        <AddMessage notes={notes} setNotes={setNotes} userId={userId} />
-      </div>}
-
+      {userId && <>
+          <Chats chats={chats} setChats={setChats} chatId={chatId} setChatId={setChatId} />
+          <div className='server'>
+            <ol>
+              {display}
+            </ol>
+            <h2>You can add your message in the field below</h2>
+            <AddMessage notes={notes} setNotes={setNotes} userId={userId} chatId={chatId} />
+          </div>
+        </>}
+      </div>
         {/* ************************************************************************************ */}
         {/* Logo Vite + React */}
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
+      <a href="https://vitejs.dev" target="_blank">
+        <img src={viteLogo} className="logo" alt="Vite logo" />
+      </a>
+      <a href="https://react.dev" target="_blank">
+        <img src={reactLogo} className="logo react" alt="React logo" />
+      </a>
 
     </>
   )

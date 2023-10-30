@@ -1,17 +1,22 @@
 import React from 'react'
 import { FaUserLarge } from "react-icons/fa6";
 
-function Users({ users, choiceUserId }) {
+function Users({ users, choiceUserId, userId }) {
+
     return (
         <div className='users-list'>
-            <FaUserLarge/>
+            <FaUserLarge />
             <label htmlFor="users"> </label>
-            <select name="users" id="users" onChange={choiceUserId} >
-                {users.map(el =>
-                    <option key={el.id} value={el.id} >{el.login}</option>
+            <select value={userId} name="users" id="users" onChange={choiceUserId} >
+                {users.map(el => {
+                    if (userId === el.id) {
+                        return < option key={el.id} value={el.id} > {el.login}</option>
+                    }
+                    return < option key={el.id} value={el.id} > {el.login}</option>
+                }
                 )}
             </select>
-        </div>
+        </div >
     )
 }
 export default Users

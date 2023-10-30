@@ -5,19 +5,22 @@ import nextId from "react-id-generator";
 const url = `/api/notes/`
 // const url = 'http://localhost:3000/api/notes'
 
-function AddMessage({ notes, setNotes, userId }) {
+function AddMessage({ notes, setNotes, userId, chatId }) {
     const [newMessage, setNewMessage] = useState('')
     const elId = nextId()
     const onchange = (e) => {
         setNewMessage(e.target.value)
     }
     const addMessage = () => {
+        const url = 'http://localhost:3000/api/notes'
         const time = new Date()
         const messageObject = {
             content: newMessage,
             date: time,
-            author: userId
+            author: userId,
+            chatid: chatId
         }
+        console.log(messageObject)
         axios.post(url, messageObject)
             .then(res => {
                 console.log("Okay")
@@ -26,11 +29,12 @@ function AddMessage({ notes, setNotes, userId }) {
             })
         setNotes(notes.concat({
             author: userId,
-            content: newMessage, 
-            id: elId 
+            content: newMessage,
+            id: elId,
+            chatid: chatId
         }))
-    }
 
+    }
 
     return (
         <div className='add-message'>

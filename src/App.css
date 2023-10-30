@@ -6,6 +6,19 @@
   text-align: center;
 }
 
+.container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.chat-list {
+  text-align: left;
+}
+
+.link {
+  cursor: pointer;
+}
+
 .logo {
   margin-top: 5rem;
   height: 2.5em;
@@ -21,9 +34,28 @@
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
+
 .users-list {
   text-align: right;
   margin-right: 2rem;
+}
+
+.server {
+  width: 70%;
+}
+
+.chat-list {
+  padding: 1rem;
+  background-color: #f5f5f5;
+  height: fit-content;
+}
+
+.chat-list>p:hover {
+color: gray
+}
+
+.chat-list-button {
+  background-color: lightgrey;
 }
 
 .messages {
@@ -35,18 +67,21 @@
   text-align: left;
   align-items: center;
 }
+
 .messages-text {
   text-align: left;
   width: 50%;
 }
+
 .userBackground {
-background-color: #f8f8f8;
+  background-color: #f8f8f8;
 }
 
 li {
   border: 2px solid white;
   padding: 0;
 }
+
 .input-text {
   resize: none;
   width: 70%;
@@ -57,11 +92,13 @@ li {
   font-size: 1rem;
   overflow: hidden;
 }
+
 .add-message {
   display: flex;
   justify-content: space-between;
   margin-bottom: 1rem;
 }
+
 .add-message-textarea {
   resize: none;
   width: 70%;
@@ -69,6 +106,7 @@ li {
   overflow: hidden;
   margin-right: 0.5rem;
 }
+
 ol {
   list-style-type: none;
   padding: 0;
@@ -84,8 +122,9 @@ button {
 }
 
 .button-zero {
-width: 7rem;
+  width: 7rem;
 }
+
 .x-button {
   color: red;
 }
