@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import nextId from "react-id-generator";
 
-const url = `/api/notes/`
+const url = '/api/notes/'
 // const url = 'http://localhost:3000/api/notes'
 
 function AddMessage({ notes, setNotes, userId, chatId }) {
@@ -12,7 +12,6 @@ function AddMessage({ notes, setNotes, userId, chatId }) {
         setNewMessage(e.target.value)
     }
     const addMessage = () => {
-        const url = 'http://localhost:3000/api/notes'
         const time = new Date()
         const messageObject = {
             content: newMessage,
