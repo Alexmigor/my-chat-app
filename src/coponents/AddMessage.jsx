@@ -32,7 +32,7 @@ function AddMessage({ notes, setNotes, userId, chatId }) {
             id: elId,
             chatid: chatId
         }))
-
+        setNewMessage('')
     }
 
     return (

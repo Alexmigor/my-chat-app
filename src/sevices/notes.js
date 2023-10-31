@@ -3,10 +3,12 @@ import axios from 'axios';
 const baseUrl = '/api/notes' 
 const usersUrl = '/users'
 const chatsUrl = '/chats'
+const invitationsUrl = '/invitations'
 
 // const baseUrl = 'http://localhost:3000/api/notes'
 // const usersUrl = 'http://localhost:3000/users'
 // const chatsUrl = 'http://localhost:3000/chats'
+// const invitationsUrl = 'http://localhost:3000/invitations'
 
 const getAll = () => {
     const request = axios.get(baseUrl)
@@ -21,6 +23,11 @@ const getChats = () => {
     return request.then(response => response.data)
 }
 
+const getInvitations = () => {
+    const request = axios.get(invitationsUrl)
+    return request.then(response => response.data)
+}
+
 const create = newObject => axios.post(baseUrl, newObject).then(response => response.data)
 
 const update = (id, newObject) => axios.put(`${baseUrl}/${id}`, newObject).then(response => response.data)
@@ -29,6 +36,6 @@ const deleted = id => axios.delete(`${baseUrl}/${id}`).then(response => response
 
 
 
-const noteService = { getAll, getAllUsers, getChats, create, update, deleted }
+const noteService = { getAll, getAllUsers, getChats, getInvitations, create, update, deleted }
 
 export default noteService

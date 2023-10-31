@@ -85,21 +85,25 @@ function App() {
   return (
     <>
       <Users users={users} choiceUserId={choiceUser} userId={userId} />
-      <h1>Welcome to the Chat</h1>
       <div className='container'>
-      {userId && <>
-          <Chats chats={chats} setChats={setChats} chatId={chatId} setChatId={setChatId} />
+        {userId && <>
+          <Chats
+            chats={chats}
+            setChats={setChats}
+            chatId={chatId}
+            setChatId={setChatId}
+            userId={userId}
+          />
           <div className='server'>
             <ol>
               {display}
             </ol>
-            <h2>You can add your message in the field below</h2>
             <AddMessage notes={notes} setNotes={setNotes} userId={userId} chatId={chatId} />
           </div>
         </>}
       </div>
-        {/* ************************************************************************************ */}
-        {/* Logo Vite + React */}
+      {/* ************************************************************************************ */}
+      {/* Logo Vite + React */}
       <a href="https://vitejs.dev" target="_blank">
         <img src={viteLogo} className="logo" alt="Vite logo" />
       </a>
