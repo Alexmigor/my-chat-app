@@ -6,6 +6,7 @@ import Message from './coponents/Message'
 import AddMessage from './coponents/AddMessage'
 import Users from './coponents/Users'
 import Chats from './coponents/Chats'
+import InputSearch from './coponents/InputSearch'
 import noteService from './sevices/notes'
 
 
@@ -17,12 +18,14 @@ function App() {
   const [userId, setUserId] = useState('')
   const [chats, setChats] = useState([])
   const [chatId, setChatId] = useState('')
+  const [invitations, setInvitations] = useState([])
+
 
   useEffect(() => {
     noteService
       .getAll()
       .then(initialNotes => setNotes(initialNotes))
-  }, [userId])
+  }, [userId, chatId])
 
   useEffect(() => {
     noteService
@@ -39,6 +42,7 @@ function App() {
     const userId = document.getElementById("users").value;
     localStorage.setItem('userId', JSON.stringify(userId))
     setUserId(userId)
+
   }
 
   useEffect(() => {
@@ -59,7 +63,8 @@ function App() {
           content={el.content}
           userId={userId}
           name={name}
-          id={el.author}
+          id={el.id}
+          authorId={el.author}
           deleteMessage={() => deleteMessage(el.id)}
         />
       </li>
@@ -75,7 +80,8 @@ function App() {
           userId={userId}
           chatId={chatId}
           name={name}
-          id={el.author}
+          id={el.id}
+          authorId={el.author}
           deleteMessage={() => deleteMessage(el.id)}
         />
       </li>
@@ -84,8 +90,18 @@ function App() {
 
   return (
     <>
-      <Users users={users} choiceUserId={choiceUser} userId={userId} />
-      <div className='container'>
+      <div className='container-input'>
+        <InputSearch
+          users={users}
+          chats={chats}
+          setChats={setChats}
+          invitations={invitations}
+          setInvitations={setInvitations}
+          userId={userId}
+        />
+        <Users users={users} choiceUserId={choiceUser} userId={userId} />
+      </div>
+      <div className='container-server'>
         {userId && <>
           <Chats
             chats={chats}
@@ -93,8 +109,10 @@ function App() {
             chatId={chatId}
             setChatId={setChatId}
             userId={userId}
+            invitations={invitations}
+            setInvitations={setInvitations}
           />
-          <div className='server'>
+          <div className='container-messages'>
             <ol>
               {display}
             </ol>

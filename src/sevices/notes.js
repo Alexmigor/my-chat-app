@@ -28,6 +28,10 @@ const getInvitations = () => {
     return request.then(response => response.data)
 }
 
+const createChat = newObject => axios.post(chatsUrl, newObject).then(response => response.data)
+
+const createInvitation = newObject => axios.post(invitationsUrl, newObject).then(response => response.data)
+
 const create = newObject => axios.post(baseUrl, newObject).then(response => response.data)
 
 const update = (id, newObject) => axios.put(`${baseUrl}/${id}`, newObject).then(response => response.data)
@@ -36,6 +40,19 @@ const deleted = id => axios.delete(`${baseUrl}/${id}`).then(response => response
 
 
 
-const noteService = { getAll, getAllUsers, getChats, getInvitations, create, update, deleted }
+const noteService = {
+    baseUrl,
+    getAll,
+    getAllUsers,
+    getChats,
+    getInvitations,
+    create,
+    update,
+    deleted,
+    createChat,
+    createInvitation,
+    chatsUrl,
+    invitationsUrl
+}
 
 export default noteService

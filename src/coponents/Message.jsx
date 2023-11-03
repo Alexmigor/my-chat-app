@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 
-function Message({ content, id, deleteMessage, name, userId }) {
+function Message({ id, content, authorId, deleteMessage, name, userId}) {
 
     const [message, setMessage] = useState(content)
     const [editMessage, setEditMessage] = useState(message || '')
@@ -46,7 +46,7 @@ function Message({ content, id, deleteMessage, name, userId }) {
             onKeyDownCapture={handleKeypress}
             autoFocus
         />}
-        {userId == id ? <div className='button-box'>
+        {userId == authorId ? <div className='button-box'>
             <button onClick={edit}>{isButton ? 'edit' : 'save'}</button>
             <button onClick={deleteMessage} className='x-button'>X</button>
         </div> : <div className='button-zero'></div> }
