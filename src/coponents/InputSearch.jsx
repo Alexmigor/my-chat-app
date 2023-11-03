@@ -15,7 +15,7 @@ function InputSearch({ users, chats, setChats, invitations, setInvitations, user
 
     useEffect(() => {
         setUserList(users.map(e => e.login).filter(e => e.toLowerCase().includes(search.toLocaleLowerCase())))
-    }, [users])
+    }, [search])
 
 
     const addChat = (name) => {
