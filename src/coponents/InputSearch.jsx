@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import nextId from "react-id-generator";
 import noteService from '../sevices/notes';
+import nextId from "react-id-generator";
 
 function InputSearch({ users, chats, setChats, invitations, setInvitations, userId }) {
     const [search, setSearch] = useState('')
     const [userList, setUserList] = useState([])
+    const [userName, setUserName] = useState('')
 
     const chatId = nextId()
 
@@ -14,40 +15,46 @@ function InputSearch({ users, chats, setChats, invitations, setInvitations, user
     }
 
     useEffect(() => {
-        setUserList(users.map(e => e.login).filter(e => e.toLowerCase().includes(search.toLocaleLowerCase())))
-    }, [search])
+        users.map(el => el.id === userId && setUserName(el.login))
+        setUserList(users.map(e => [e.login, e.id]))
+    }, [search, userId, users])
+    const chatTitle = chats.map(e => e.title)
 
+    const addChat = (user) => {
 
-    const addChat = (name) => {
-        for (let chatName of chats) {
-            if (chatName.title === name && chatName.userid === userId) {
-                console.log("Oops!")
+        for (let i = 0; i < chatTitle.length; i++) {
+            let title = chatTitle[i]
+            if (title === userName + "/" + user[0]) {
+                alert("Oops! Such a chat already exists...")
                 setSearch('')
                 return
             }
         }
+
         const url = noteService.chatsUrl
         const chatObject = {
-            title: name,
+            members: [userId, user[1]],
+            title: userName + "/" + user[0],
             chatid: chatId,
-            userid: userId
+            userid: userId,
         }
-        console.log(chatObject)
+
         axios.post(url, chatObject)
             .then(res => {
-                console.log("Okay")
+                console.log("Set chat")
                 setChats(chats.concat(res.data))
+                setSearch('')
             })
 
         const invUrl = noteService.invitationsUrl
         const invitationObject = {
-            chatid: chatId,
-            userid: userId
+
+            invited: [userId, user[1]]
         }
-        console.log(invitationObject)
+   
         axios.post(invUrl, invitationObject)
             .then(res => {
-                console.log("Okay")
+                console.log("Set invitation")
                 setInvitations(invitations.concat(res.data))
             })
         setInvitations(invitations.concat(invitationObject))
@@ -64,7 +71,12 @@ function InputSearch({ users, chats, setChats, invitations, setInvitations, user
                 onChange={inputSearch}
             />
             <div className='search-userslist'>
-                {search && userList.map((name, index) => <li key={index} onClick={() => addChat(name)}  >{name}</li>)}
+                {search && userList.filter(e => e[0].toLowerCase().includes(search.toLocaleLowerCase()))
+                .map((user, index) => 
+                <li key={index} onClick={() => addChat(user)}  >{user[0]}
+                </li>
+                )
+                }
             </div>
 
         </div>

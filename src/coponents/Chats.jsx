@@ -1,55 +1,47 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import noteService from '../sevices/notes';
 
-function Chats({ chats, setChats, setChatId, userId, invitations, setInvitations  }) {
- 
+function Chats({ chats, setChats, setChatId, userId }) {
 
   useEffect(() => {
     noteService
-    .getChats()
-    .then(user => setChats(user))
-  }, [setChats])
-  
+      .getChats()
+      .then(user => setChats(user))
+  }, [])
+
   const choiceChat = (id) => {
     userId
     setChatId(id)
   }
-  useEffect(() => {
-    noteService
-      .getInvitations()
-      .then(invitation => setInvitations(invitation))
 
-  }, [])
+  const chatUser = chats.map(el => el)
+  const member = chats.map(el => el.members)
 
-  // Создал 2 массива для сравнения наличия приглашений в чат
-  const inv = invitations.filter(e => e.userid === userId).map(e => e)
-  const cht = chats.map(e => e)
-
-  // Решение на встроенном цикле
-  const findInvitations = (inv, cht) => {
+  const findInvitations = (cht, mem) => {
     const result = []
-    for (let i = 0; i < inv.length; i++) {
-      let invid = inv[i].chatid
-      for (let j = 0; j < cht.length; j++) {
-        let chatid = cht[j].chatid
-        if (invid === chatid) {
-          result.push(cht[j])
+    for (let i = 0; i < cht.length; i++) {
+      let chatUser = cht[i]
+      for (let j = 0; j < mem.length; j++) {
+        let memUser = mem[i][j]
+        if (userId === memUser) {
+
+          result.push(chatUser)
         }
       }
     }
+
     return result
   }
-  const invChat = findInvitations(inv, cht).map(e => e)
+  const invChat = findInvitations(chatUser, member)
 
-  // Решение по последним рекомендациям для JS разработчиков
-  const invChat2 = cht.filter(item2 => {
-    return inv.some(item1 => item1.chatid === item2.chatid)
-  })
-  
+
   return (
     <>
       <div className='chat-list'>
-        {invChat2.map(el => <p className='link' key={el.id} onClick={() => choiceChat(el.chatid)}>{el.title} </p>)}
+        {invChat.map(el =>
+          <p className='link' key={el.id} onClick={() => choiceChat(el.chatid)}>
+            Chat: {el.title}
+          </p>)}
       </div >
     </>
   )
