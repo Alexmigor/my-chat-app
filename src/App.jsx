@@ -2,13 +2,12 @@ import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import Message from './coponents/Message'
-import AddMessage from './coponents/AddMessage'
-import Users from './coponents/Users'
-import Chats from './coponents/Chats'
-import InputSearch from './coponents/InputSearch'
+import Message from './components/Message'
+import AddMessage from './components/AddMessage'
+import Users from './components/Users'
+import Chats from './components/Chats'
+import InputSearch from './components/InputSearch'
 import noteService from './sevices/notes'
-
 
 
 
@@ -17,47 +16,57 @@ function App() {
   const [users, setUsers] = useState([])
   const [userId, setUserId] = useState('')
   const [chats, setChats] = useState([])
+  const [members, setMembers] = useState([])
+  const [userList, setUserList] = useState([])
   const [chatId, setChatId] = useState('')
-  const [invitations, setInvitations] = useState([])
+
 
 
   useEffect(() => {
+    noteService
+      .getChats()
+      .then(initialChats => setChats(initialChats))
+      .then(setMembers(chats.map(el => el.members)))
     noteService
       .getAll()
       .then(initialNotes => setNotes(initialNotes))
-  }, [userId, chatId])
-
-  useEffect(() => {
     noteService
       .getAllUsers()
       .then(user => setUsers(user))
-  }, [])
+
+    const savedUser = localStorage.getItem('userId')
+    if (chatId) {
+      setUserId(JSON.parse(savedUser))
+    }
+    
+  }, [userId])
+
 
   const deleteMessage = (id) => {
     noteService
       .deleted(id)
       .then(setNotes(notes.filter(n => n.id !== id)))
   }
+
   const choiceUser = () => {
     const userId = document.getElementById("users").value;
     localStorage.setItem('userId', JSON.stringify(userId))
     setUserId(userId)
-
   }
+  // useEffect(() => {
+  //   const savedUser = localStorage.getItem('userId')
+  //   if (savedUser) {
+  //     setUserId(JSON.parse(savedUser))
+  //   }
 
-  useEffect(() => {
-    const savedUser = localStorage.getItem('userId')
-    if (savedUser) {
-      setUserId(JSON.parse(savedUser))
-    }
-  }, [])
+  // })
+
 
   const isChat = id => id.chatid === chatId
   const display = chatId ? notes.filter(isChat)
     .map((el) => {
       const user = users.find(user => user.id === el.author)
       const name = user ? user.login : ''
-
       return <li key={el.id} style={{ backgroundColor: el.author === userId ? "#f8f8f8" : "white" }} >
         <Message
           content={el.content}
@@ -95,9 +104,11 @@ function App() {
           users={users}
           chats={chats}
           setChats={setChats}
-          invitations={invitations}
-          setInvitations={setInvitations}
+          members={members}
+          userList={userList}
+          setUserList={setUserList}
           userId={userId}
+
         />
         <Users users={users} choiceUserId={choiceUser} userId={userId} />
       </div>
@@ -109,8 +120,7 @@ function App() {
             chatId={chatId}
             setChatId={setChatId}
             userId={userId}
-            invitations={invitations}
-            setInvitations={setInvitations}
+            members={members}
           />
           <div className='container-messages'>
             <ol>
@@ -128,7 +138,6 @@ function App() {
       <a href="https://react.dev" target="_blank">
         <img src={reactLogo} className="logo react" alt="React logo" />
       </a>
-
     </>
   )
 }

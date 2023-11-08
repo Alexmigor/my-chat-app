@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import noteService from '../sevices/notes';
-import nextId from "react-id-generator";
+import noteService from '../sevices/notes'
 
-function InputSearch({ users, chats, setChats, invitations, setInvitations, userId }) {
+function InputSearch({ users, chats, setChats, members, userList, setUserList, userId }) {
     const [search, setSearch] = useState('')
-    const [userList, setUserList] = useState([])
     const [userName, setUserName] = useState('')
-
-    const chatId = nextId()
 
     const inputSearch = e => {
         setSearch(e.target.value)
@@ -18,13 +14,14 @@ function InputSearch({ users, chats, setChats, invitations, setInvitations, user
         users.map(el => el.id === userId && setUserName(el.login))
         setUserList(users.map(e => [e.login, e.id]))
     }, [search, userId, users])
-    const chatTitle = chats.map(e => e.title)
 
     const addChat = (user) => {
 
-        for (let i = 0; i < chatTitle.length; i++) {
-            let title = chatTitle[i]
-            if (title === userName + "/" + user[0]) {
+        const chatId = chats.map(e => e.chatid)
+
+        for (let i = 0; i < chatId.length; i++) {
+            let chatid = chatId[i]
+            if (chatid === ([userName, user[0]].sort().join(''))) {
                 alert("Oops! Such a chat already exists...")
                 setSearch('')
                 return
@@ -33,9 +30,9 @@ function InputSearch({ users, chats, setChats, invitations, setInvitations, user
 
         const url = noteService.chatsUrl
         const chatObject = {
-            members: [userId, user[1]],
+            members: [userId, user[1]].sort(),
             title: userName + "/" + user[0],
-            chatid: chatId,
+            chatid: [userName, user[0]].sort().join(''),
             userid: userId,
         }
 
@@ -45,19 +42,6 @@ function InputSearch({ users, chats, setChats, invitations, setInvitations, user
                 setChats(chats.concat(res.data))
                 setSearch('')
             })
-
-        const invUrl = noteService.invitationsUrl
-        const invitationObject = {
-
-            invited: [userId, user[1]]
-        }
-   
-        axios.post(invUrl, invitationObject)
-            .then(res => {
-                console.log("Set invitation")
-                setInvitations(invitations.concat(res.data))
-            })
-        setInvitations(invitations.concat(invitationObject))
         setSearch('')
     }
 
@@ -71,12 +55,7 @@ function InputSearch({ users, chats, setChats, invitations, setInvitations, user
                 onChange={inputSearch}
             />
             <div className='search-userslist'>
-                {search && userList.filter(e => e[0].toLowerCase().includes(search.toLocaleLowerCase()))
-                .map((user, index) => 
-                <li key={index} onClick={() => addChat(user)}  >{user[0]}
-                </li>
-                )
-                }
+                {search && userList.filter(e => e[0].toLowerCase().includes(search.toLocaleLowerCase())).map((user, index) => <li key={index} onClick={() => addChat(user)}  >{user[0]}</li>)}
             </div>
 
         </div>
