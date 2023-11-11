@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import noteService from '../sevices/notes'
 
-function InputSearch({ users, chats, setChats, members, userList, setUserList, userId }) {
+function InputSearch({ users, chats, setChats, userList, setUserList, userId }) {
     const [search, setSearch] = useState('')
     const [userName, setUserName] = useState('')
 
@@ -11,16 +11,19 @@ function InputSearch({ users, chats, setChats, members, userList, setUserList, u
     }
 
     useEffect(() => {
-        users.map(el => el.id === userId && setUserName(el.login))
-        setUserList(users.map(e => [e.login, e.id]))
-    }, [search, userId, users])
+        let userlist = []
+        users.map(el => {
+            userlist = [...userlist, [el.login, el.id]]
+            if (el.id === userId) setUserName(el.login)
+        })
+        setUserList(userlist.filter(user => user[1] !== userId))
+
+    }, [search, userId])
 
     const addChat = (user) => {
 
-        const chatId = chats.map(e => e.chatid)
-
-        for (let i = 0; i < chatId.length; i++) {
-            let chatid = chatId[i]
+        for (let i = 0; i < chats.length; i++) {
+            const chatid = chats[i].chatid
             if (chatid === ([userName, user[0]].sort().join(''))) {
                 alert("Oops! Such a chat already exists...")
                 setSearch('')
@@ -55,7 +58,11 @@ function InputSearch({ users, chats, setChats, members, userList, setUserList, u
                 onChange={inputSearch}
             />
             <div className='search-userslist'>
-                {search && userList.filter(e => e[0].toLowerCase().includes(search.toLocaleLowerCase())).map((user, index) => <li key={index} onClick={() => addChat(user)}  >{user[0]}</li>)}
+                {search &&
+                    userList.filter(e => e[0].toLowerCase().includes(search.toLowerCase()))
+                        .map((user, index) =>
+                            <li key={index} onClick={() => addChat(user)}>{user[0]}</li>
+                        )}
             </div>
 
         </div>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 
 function Chats({ chats, members, setChatId, userId }) {
@@ -8,18 +8,20 @@ function Chats({ chats, members, setChatId, userId }) {
   const findUserChats = (cht, mem) => {
     const result = []
     for (let i = 0; i < cht.length; i++) {
-      let chatUser = cht[i]
-      for (let j = 0; j < mem.length; j++) {
-        let member = mem[i][j]
-        if (userId === member) {
-          result.push(chatUser)
-        }
+      const chatUser = cht[i]
+      const chatMembers = mem[i] // get an array of members
+      if (chatMembers && chatMembers.includes(userId)) {
+        result.push(chatUser)
       }
+
     }
     return result
   }
-  const chatUser = chats.map(el => el)
-  const invChat = findUserChats(chatUser, members)
+  const [invChat, setInvChat] = useState()
+
+  useEffect(() => {
+    setInvChat(findUserChats(chats, members))
+  }, [userId, members])
 
 
   return (
@@ -29,7 +31,7 @@ function Chats({ chats, members, setChatId, userId }) {
           <p className='link' key={el.id} onClick={() => choiceChat(el.chatid)}>
             Chat: {el.title}
           </p>)}
-      </div >
+      </div>
     </>
   )
 }

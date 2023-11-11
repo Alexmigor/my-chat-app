@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import noteService from '../sevices/notes'
 
 function Message({ id, content, authorId, deleteMessage, name, userId}) {
 
     const [message, setMessage] = useState(content)
     const [editMessage, setEditMessage] = useState(message || '')
     const [isButton, setIsButon] = useState(true)
+    const url = `${noteService.baseUrl}/${id}`
 
-    const url = `/api/notes/${id}`
-    // const url = `http://localhost:3000/api/notes/${id}`
 
     const getOne = async () => {
         const res = await axios.put(url, {

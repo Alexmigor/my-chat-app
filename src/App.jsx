@@ -21,12 +21,10 @@ function App() {
   const [chatId, setChatId] = useState('')
 
 
-
   useEffect(() => {
     noteService
       .getChats()
       .then(initialChats => setChats(initialChats))
-      .then(setMembers(chats.map(el => el.members)))
     noteService
       .getAll()
       .then(initialNotes => setNotes(initialNotes))
@@ -34,32 +32,17 @@ function App() {
       .getAllUsers()
       .then(user => setUsers(user))
 
-    const savedUser = localStorage.getItem('userId')
-    if (chatId) {
-      setUserId(JSON.parse(savedUser))
-    }
-    
   }, [userId])
 
+  useEffect(() => {
+    setMembers(chats.map(el => el.members))
+  }, [chats])
 
   const deleteMessage = (id) => {
     noteService
       .deleted(id)
       .then(setNotes(notes.filter(n => n.id !== id)))
   }
-
-  const choiceUser = () => {
-    const userId = document.getElementById("users").value;
-    localStorage.setItem('userId', JSON.stringify(userId))
-    setUserId(userId)
-  }
-  // useEffect(() => {
-  //   const savedUser = localStorage.getItem('userId')
-  //   if (savedUser) {
-  //     setUserId(JSON.parse(savedUser))
-  //   }
-
-  // })
 
 
   const isChat = id => id.chatid === chatId
@@ -104,16 +87,14 @@ function App() {
           users={users}
           chats={chats}
           setChats={setChats}
-          members={members}
           userList={userList}
           setUserList={setUserList}
           userId={userId}
-
         />
-        <Users users={users} choiceUserId={choiceUser} userId={userId} />
+        <Users users={users} userId={userId} setUserId={setUserId} />
       </div>
       <div className='container-server'>
-        {userId && <>
+        {<>
           <Chats
             chats={chats}
             setChats={setChats}
