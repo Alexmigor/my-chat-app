@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import noteService from '../sevices/notes'
+import noteService from '../services/notes'
 
 function InputSearch({ users, chats, setChats, userList, setUserList, userId }) {
     const [search, setSearch] = useState('')
@@ -24,7 +24,7 @@ function InputSearch({ users, chats, setChats, userList, setUserList, userId }) 
 
         for (let i = 0; i < chats.length; i++) {
             const chatid = chats[i].chatid
-            if (chatid === ([userName, user[0]].sort().join(''))) {
+            if (chatid === ([userId, user[1]].sort().join(''))) {
                 alert("Oops! Such a chat already exists...")
                 setSearch('')
                 return
@@ -35,7 +35,7 @@ function InputSearch({ users, chats, setChats, userList, setUserList, userId }) 
         const chatObject = {
             members: [userId, user[1]].sort(),
             title: userName + "/" + user[0],
-            chatid: [userName, user[0]].sort().join(''),
+            chatid: [userId, user[1]].sort().join(''),
             userid: userId,
         }
 
@@ -61,7 +61,7 @@ function InputSearch({ users, chats, setChats, userList, setUserList, userId }) 
                 {search &&
                     userList.filter(e => e[0].toLowerCase().includes(search.toLowerCase()))
                         .map((user, index) =>
-                            <li key={index} onClick={() => addChat(user)}>{user[0]}</li>
+                            <li className='chatList'  key={index} onClick={() => addChat(user)}>{user[0]}</li>
                         )}
             </div>
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios'
-import noteService from '../sevices/notes'
+import noteService from '../services/notes'
 
 function Message({ id, content, authorId, deleteMessage, name, userId}) {
 

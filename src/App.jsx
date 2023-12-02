@@ -7,7 +7,7 @@ import AddMessage from './components/AddMessage'
 import Users from './components/Users'
 import Chats from './components/Chats'
 import InputSearch from './components/InputSearch'
-import noteService from './sevices/notes'
+import noteService from './services/notes'
 
 
 
@@ -16,7 +16,7 @@ function App() {
   const [users, setUsers] = useState([])
   const [userId, setUserId] = useState('')
   const [chats, setChats] = useState([])
-  const [members, setMembers] = useState([])
+  const [allMembers, setAllMembers] = useState([])
   const [userList, setUserList] = useState([])
   const [chatId, setChatId] = useState('')
 
@@ -35,7 +35,7 @@ function App() {
   }, [userId])
 
   useEffect(() => {
-    setMembers(chats.map(el => el.members))
+    setAllMembers(chats.map(el => el.members))
   }, [chats])
 
   const deleteMessage = (id) => {
@@ -91,7 +91,7 @@ function App() {
           setUserList={setUserList}
           userId={userId}
         />
-        <Users users={users} userId={userId} setUserId={setUserId} />
+        {users && <Users users={users} userId={userId} setUserId={setUserId} />}
       </div>
       <div className='container-server'>
         {<>
@@ -101,7 +101,9 @@ function App() {
             chatId={chatId}
             setChatId={setChatId}
             userId={userId}
-            members={members}
+            setUserId={setUserId}
+            allMembers={allMembers}
+            users={users}
           />
           <div className='container-messages'>
             <ol>
@@ -113,12 +115,12 @@ function App() {
       </div>
       {/* ************************************************************************************ */}
       {/* Logo Vite + React */}
-      <a href="https://vitejs.dev" target="_blank">
+      {/* <a href="https://vitejs.dev" target="_blank">
         <img src={viteLogo} className="logo" alt="Vite logo" />
       </a>
       <a href="https://react.dev" target="_blank">
         <img src={reactLogo} className="logo react" alt="React logo" />
-      </a>
+      </a> */}
     </>
   )
 }

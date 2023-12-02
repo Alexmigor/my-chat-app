@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 import nextId from "react-id-generator";
-import noteService from '../sevices/notes';
+import noteService from '../services/notes';
 
 
 

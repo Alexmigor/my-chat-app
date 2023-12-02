@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { FaUserLarge } from "react-icons/fa6";
-// import noteService from '../sevices/notes';
+import UserList from './UserList';
 
 
 function Users({ users, userId, setUserId }) {
@@ -19,12 +19,8 @@ function Users({ users, userId, setUserId }) {
 
     return (
         <div className='users-list'>
-            <FaUserLarge />
-            <label htmlFor="users"> </label>
-            <select value={userId ? userId : ""} name="users" id="users" onChange={choiceUser} >
-                <option value="">--Select user--</option>
-                {users.map(el => < option key={el.id} value={el.id} > {el.login}</option>)}
-            </select>
+            <FaUserLarge style={{ marginRight: '0.5rem' }} />
+            <UserList selectName={"users"} choiceUser={choiceUser} users={users} userId={userId} />
         </div >
     )
 }

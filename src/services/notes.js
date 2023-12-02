@@ -22,6 +22,10 @@ const getChats = () => {
     const request = axios.get(chatsUrl)
     return request.then(response => response.data)
 }
+const getOneChat = (id) => {
+    const request = axios.get(`${chatsUrl}/${id}`)
+    return request.then(response => response.data)
+}
 
 const getInvitations = () => {
     const request = axios.get(invitationsUrl)
@@ -29,6 +33,7 @@ const getInvitations = () => {
 }
 
 const createChat = newObject => axios.post(chatsUrl, newObject).then(response => response.data)
+const updateChat = (id, newObject) => axios.put(`${chatsUrl}/${id}`, newObject).then(response => response.data)
 
 const createInvitation = newObject => axios.post(invitationsUrl, newObject).then(response => response.data)
 
@@ -45,11 +50,13 @@ const noteService = {
     getAll,
     getAllUsers,
     getChats,
+    getOneChat,
     getInvitations,
     create,
     update,
     deleted,
     createChat,
+    updateChat,
     createInvitation,
     chatsUrl,
     invitationsUrl
